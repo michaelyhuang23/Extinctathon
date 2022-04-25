@@ -15,10 +15,4 @@ public class DialogueManager : MonoBehaviour
         dialogue.text = "MADDADDAM: ";
         writer.TypeText(introText, dialogue);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
