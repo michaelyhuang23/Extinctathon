@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject PointKeeper;
     public Mammal answerAnimal;
     private List<GameObject> rows;
+    private Mammal[] mammals;
     public int triesLeft = 10;
 
     void createRow(){
@@ -21,10 +22,11 @@ public class InputManager : MonoBehaviour
         newRow.transform.SetParent(ViewPort.transform);
         newRow.transform.localScale = new Vector3(1,1,1);
         rows.Add(newRow);
+        ViewPort.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rows.Count*200);
     }
 
     void Start(){
-        Mammal[] mammals = gameObject.GetComponent<MammalManager>().mammals;
+        mammals = Mammal.mammals;
         int index = Random.Range(0, mammals.Length);
         print("chosen index: "+index);
         answerAnimal = mammals[index];
@@ -40,7 +42,8 @@ public class InputManager : MonoBehaviour
 
     void Judge(){
         Mammal input = rows[rows.Count - 1].GetComponent<RowInputMonitor>().readInput();
-        if(answerAnimal.order == input.order && answerAnimal.family == input.family && answerAnimal.genus == input.genus && answerAnimal.species == input.species){
+        if(input==null) return;
+        if(answerAnimal.match(input)){
             rows[rows.Count - 1].GetComponent<RowInputMonitor>().markInput(answerAnimal);
             StartCoroutine(slowExit());
         }else{

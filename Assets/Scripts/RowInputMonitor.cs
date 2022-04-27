@@ -4,13 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using MammalData;
+using CustomAnimation;
 
 
 public class RowInputMonitor : MonoBehaviour
 {
     [SerializeField] private GameObject order, family, genus, species;
     [SerializeField] private GameObject orderT, familyT, genusT, speciesT;
-    private TMP_InputField[] inputfields;
     private TMP_InputField orderF, familyF, genusF, speciesF;
     private Mammal output;
 
@@ -20,7 +20,6 @@ public class RowInputMonitor : MonoBehaviour
         familyF = family.GetComponent<TMP_InputField>();
         genusF = genus.GetComponent<TMP_InputField>();
         speciesF = species.GetComponent<TMP_InputField>();
-        inputfields = new TMP_InputField[4]{orderF, familyF, genusF, speciesF};
     }
 
     public Mammal readInput(){
@@ -30,6 +29,48 @@ public class RowInputMonitor : MonoBehaviour
         output.genus = genusF.text.ToLower();
         output.species = speciesF.text.ToLower();
 
+        if(!output.isValid()) {
+            showInvalid();
+            return null;
+        }
+        disableInput();
+        return output;
+    }
+
+    void showInvalid(){
+        float timespan = 0.02f;
+        if(!output.isOrderValid())
+            StartCoroutine(jerkAnimation(order.transform, timespan));
+        StartCoroutine(jerkAnimation(family.transform, timespan));
+        StartCoroutine(jerkAnimation(genus.transform, timespan));
+        StartCoroutine(jerkAnimation(species.transform, timespan));
+    }
+
+    IEnumerator jerkAnimation(Transform textTransform, float timespan){
+        Quaternion originalRot = textTransform.rotation; 
+        float time = 0f;
+        while(time < timespan){
+            time += Time.deltaTime;
+            textTransform.rotation = originalRot * Quaternion.Euler(0,0,time/timespan*10);
+            yield return null;
+        }
+        time = 0f;
+        while(time < 2*timespan){
+            time += Time.deltaTime;
+            textTransform.rotation = originalRot * Quaternion.Euler(0,0,10) * Quaternion.Euler(0,0,-time/(2*timespan)*20);
+            yield return null;
+        }
+        time = 0f;
+        while(time < timespan){
+            time += Time.deltaTime;
+            textTransform.rotation = originalRot * Quaternion.Euler(0,0,-10) * Quaternion.Euler(0,0,time/(timespan)*10);
+            yield return null;
+        }
+
+        textTransform.rotation = originalRot;
+    }
+
+    public void disableInput(){
         orderF.enabled = false;
         familyF.enabled = false;
         genusF.enabled = false;
@@ -39,46 +80,31 @@ public class RowInputMonitor : MonoBehaviour
         familyT.GetComponent<TMP_Text>().text = output.family;
         genusT.GetComponent<TMP_Text>().text = output.genus;
         speciesT.GetComponent<TMP_Text>().text = output.species;
-
-        return output;
     }
 
     void markGreen(GameObject obj){
         Color32 targetC = new Color32(9,255,0,235);
-        StartCoroutine(colorAnimation(obj.GetComponent<TMP_Text>(), obj.transform, targetC, 1));
+        StartCoroutine(CodeAnimator.colorAnimation(obj.GetComponent<TMP_Text>(), targetC, 1));
+        StartCoroutine(CodeAnimator.rotateAnimation(obj.transform, 0,360,0, 1));
     }
 
     void markRed(GameObject obj){
         Color32 targetC = new Color32(255,0,9,235);
-        StartCoroutine(colorAnimation(obj.GetComponent<TMP_Text>(), obj.transform, targetC, 1));
-    }
-
-    IEnumerator colorAnimation(TMP_Text textEntry, Transform textTransform, Color32 targetColor, float timespan){
-        Color32 oldColor = textEntry.color;
-        Quaternion originalRot = textTransform.rotation; 
-        float time = 0f;
-        while(time < timespan){
-            time += Time.deltaTime;
-            textEntry.color = Color.Lerp(oldColor, targetColor, time/timespan);
-            textTransform.rotation = originalRot * Quaternion.Euler(0,time/timespan*360,0);
-
-            yield return null;
-        }
-
-        textTransform.rotation = originalRot;
+        StartCoroutine(CodeAnimator.colorAnimation(obj.GetComponent<TMP_Text>(), targetC, 1));
+        StartCoroutine(CodeAnimator.rotateAnimation(obj.transform, 0,360,0 , 1));
     }
 
     public void markInput(Mammal refe){
-        if(refe.order == output.order) markGreen(orderT);
+        if(refe.matchOrder(output)) markGreen(orderT);
         else markRed(orderT);
 
-        if(refe.family == output.family) markGreen(familyT);
+        if(refe.matchFamily(output)) markGreen(familyT);
         else markRed(familyT);
 
-        if(refe.genus == output.genus) markGreen(genusT);
+        if(refe.matchGenus(output)) markGreen(genusT);
         else markRed(genusT);
 
-        if(refe.species == output.species) markGreen(speciesT);
+        if(refe.matchSpecies(output)) markGreen(speciesT);
         else markRed(speciesT);
     }
 

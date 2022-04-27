@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using CustomAnimation;
 
 public class PointManager : MonoBehaviour
 {
@@ -10,30 +11,23 @@ public class PointManager : MonoBehaviour
     public int max_point;
     [SerializeField] private Color32 lowC, highC;
     [SerializeField] private float animate_time = 1f;
+    [SerializeField] private ExitManager exiter;
 
     void Start(){
         point = max_point;
-        gameObject.GetComponent<TMP_Text>().text = "Current Point:  "+point;
+        gameObject.GetComponent<TMP_Text>().text = "+"+point;
         gameObject.GetComponent<TMP_Text>().color = highC;
     }
 
     public void setPoint(int point_){
         point = point_;
-        gameObject.GetComponent<TMP_Text>().text = "Current Point:  "+point;
+        gameObject.GetComponent<TMP_Text>().text = "+"+point;
         Color32 targetC = Color.Lerp(lowC, highC, (float)point/(float)max_point);
-        pointAnimation(gameObject.GetComponent<TMP_Text>(), gameObject.transform, targetC, animate_time);
+        StartCoroutine(CodeAnimator.rotateAnimation(transform, 360,0,0 , animate_time));
+        StartCoroutine(CodeAnimator.colorAnimation(gameObject.GetComponent<TMP_Text>(), targetC, animate_time));
+
+        if(point == 0)
+            exiter.ExitPlayRoom();
     }
 
-    void pointAnimation(TMP_Text textEntry, Transform textTransform, Color32 targetColor, float timespan){
-        Color32 oldColor = textEntry.color;
-        Quaternion originalRot = textTransform.rotation; 
-        float time = 0f;
-        while(time < timespan){
-            time += Time.deltaTime;
-            textEntry.color = Color.Lerp(oldColor, targetColor, time/timespan);
-            textTransform.rotation = originalRot * Quaternion.Euler(0,time/timespan*360,0);
-        }
-
-        textTransform.rotation = originalRot;
-    }
 }
