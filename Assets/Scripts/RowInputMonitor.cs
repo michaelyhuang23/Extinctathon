@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class RowInputMonitor : MonoBehaviour
 {
     [SerializeField] private GameObject order, family, genus, species;
-    [SerializeField] private TMP_Text orderT, familyT, genusT, speciesT;
+    [SerializeField] private GameObject orderT, familyT, genusT, speciesT;
     [SerializeField] Sprite blood, forest;
     private TMP_InputField orderF, familyF, genusF, speciesF;
     private Dictionary<string, string> output;
@@ -33,35 +33,50 @@ public class RowInputMonitor : MonoBehaviour
         genusF.enabled = false;
         speciesF.enabled = false;
 
-        orderT.text = output["Order"];
-        familyT.text = output["Family"];
-        genusT.text = output["Genus"];
-        speciesT.text = output["Species"];
+        orderT.GetComponent<TMP_Text>().text = output["Order"];
+        familyT.GetComponent<TMP_Text>().text = output["Family"];
+        genusT.GetComponent<TMP_Text>().text = output["Genus"];
+        speciesT.GetComponent<TMP_Text>().text = output["Species"];
 
         return output;
     }
 
     void markGreen(GameObject obj){
-        obj.GetComponent<Image>().sprite = forest;
-        obj.GetComponent<Image>().color = new Color(50,105,50,195);
+        Color32 targetC = new Color32(9,0,255,235);
+        StartCoroutine(colorAnimation(obj.GetComponent<TMP_Text>(), obj.transform, targetC, 1));
     }
 
     void markRed(GameObject obj){
-        obj.GetComponent<Image>().sprite = blood;
-        obj.GetComponent<Image>().color = new Color(255,155,155,90);
+        Color32 targetC = new Color32(255,0,9,235);
+        StartCoroutine(colorAnimation(obj.GetComponent<TMP_Text>(), obj.transform, targetC, 1));
+    }
+
+    IEnumerator colorAnimation(TMP_Text textEntry, Transform textTransform, Color32 targetColor, float timespan){
+        Color32 oldColor = textEntry.color;
+        Quaternion originalRot = textTransform.rotation; 
+        float time = 0f;
+        while(time < timespan){
+            time += Time.deltaTime;
+            textEntry.color = Color.Lerp(oldColor, targetColor, time/timespan);
+            textTransform.rotation = originalRot * Quaternion.Euler(0,time/timespan*360,0);
+
+            yield return null;
+        }
+
+        textTransform.rotation = originalRot;
     }
 
     public void markInput(Dictionary<string, string> refe){
-        if(refe["Order"] == output["Order"]) markGreen(order);
-        else markRed(order);
+        if(refe["Order"] == output["Order"]) markGreen(orderT);
+        else markRed(orderT);
 
-        if(refe["Family"] == output["Family"]) markGreen(family);
-        else markRed(family);
+        if(refe["Family"] == output["Family"]) markGreen(familyT);
+        else markRed(familyT);
 
-        if(refe["Genus"] == output["Genus"]) markGreen(genus);
-        else markRed(genus);
+        if(refe["Genus"] == output["Genus"]) markGreen(genusT);
+        else markRed(genusT);
 
-        if(refe["Species"] == output["Species"]) markGreen(species);
-        else markRed(species);
+        if(refe["Species"] == output["Species"]) markGreen(speciesT);
+        else markRed(speciesT);
     }
 }
