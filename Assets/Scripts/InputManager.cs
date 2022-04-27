@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using MammalData;
+
 
 public class InputManager : MonoBehaviour
 {
     [SerializeField] private GameObject ViewPort;
     [SerializeField] private GameObject QueryRow;
-    [SerializeField] private string order, family, genus, species;
-    private Dictionary<string, string> answerkey;
+    [SerializeField] private GameObject Introducer;
+    [SerializeField] private GameObject PointKeeper;
+    public Mammal answerAnimal;
     private List<GameObject> rows;
     public int triesLeft = 10;
 
@@ -21,15 +24,11 @@ public class InputManager : MonoBehaviour
     }
 
     void Start(){
-        answerkey = new Dictionary<string, string>();
-        order = order.ToLower();
-        family = family.ToLower();
-        genus = genus.ToLower();
-        species = species.ToLower();
-        answerkey["Order"] = order;
-        answerkey["Family"] = family;
-        answerkey["Genus"] = genus;
-        answerkey["Species"] = species;
+        Mammal[] mammals = gameObject.GetComponent<MammalManager>().mammals;
+        int index = Random.Range(0, mammals.Length);
+        print("chosen index: "+index);
+        answerAnimal = mammals[index];
+        Introducer.GetComponent<IntroManager>().DisplayIntro(answerAnimal.hint);
         rows = new List<GameObject>();
         createRow();
     }
@@ -40,15 +39,16 @@ public class InputManager : MonoBehaviour
     }
 
     void Judge(){
-        Dictionary<string, string> input = rows[rows.Count - 1].GetComponent<RowInputMonitor>().readInput();
-        if(answerkey["Order"] == input["Order"] && answerkey["Family"] == input["Family"] && answerkey["Genus"] == input["Genus"] && answerkey["Species"] == input["Species"]){
-            rows[rows.Count - 1].GetComponent<RowInputMonitor>().markInput(answerkey);
+        Mammal input = rows[rows.Count - 1].GetComponent<RowInputMonitor>().readInput();
+        if(answerAnimal.order == input.order && answerAnimal.family == input.family && answerAnimal.genus == input.genus && answerAnimal.species == input.species){
+            rows[rows.Count - 1].GetComponent<RowInputMonitor>().markInput(answerAnimal);
             StartCoroutine(slowExit());
-            }else{
-                triesLeft--;
-                rows[rows.Count - 1].GetComponent<RowInputMonitor>().markInput(answerkey);
-                createRow();
-            }
+        }else{
+            triesLeft--;
+            PointKeeper.GetComponent<PointManager>().setPoint(triesLeft);
+            rows[rows.Count - 1].GetComponent<RowInputMonitor>().markInput(answerAnimal);
+            createRow();
+        }
     }
 
     // Update is called once per frame

@@ -8,7 +8,8 @@ public class IntroManager : MonoBehaviour
     public string introText = "Corknut: This gigantic mammal has four legs and went extinct in 2056.";
     [SerializeField] private TMP_Text textfield;
     [SerializeField] private GameObject glitcher;
-    void Start(){
+    public void DisplayIntro(string txt){
+        introText = txt;
         textfield.text = "";
         gameObject.GetComponent<TypeWriterEffect>().TypeText(introText, textfield);
         StartCoroutine(slowGlitch());

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using MammalData;
 
 
 public class RowInputMonitor : MonoBehaviour
 {
     [SerializeField] private GameObject order, family, genus, species;
     [SerializeField] private GameObject orderT, familyT, genusT, speciesT;
-    [SerializeField] Sprite blood, forest;
+    private TMP_InputField[] inputfields;
     private TMP_InputField orderF, familyF, genusF, speciesF;
-    private Dictionary<string, string> output;
+    private Mammal output;
 
 
     void Start(){
@@ -19,30 +20,31 @@ public class RowInputMonitor : MonoBehaviour
         familyF = family.GetComponent<TMP_InputField>();
         genusF = genus.GetComponent<TMP_InputField>();
         speciesF = species.GetComponent<TMP_InputField>();
+        inputfields = new TMP_InputField[4]{orderF, familyF, genusF, speciesF};
     }
 
-    public Dictionary<string, string> readInput(){
-        output = new Dictionary<string, string>();
-        output["Order"] = orderF.text.ToLower();
-        output["Family"] = familyF.text.ToLower();
-        output["Genus"] = genusF.text.ToLower();
-        output["Species"] = speciesF.text.ToLower();
+    public Mammal readInput(){
+        output = new Mammal();
+        output.order = orderF.text.ToLower();
+        output.family = familyF.text.ToLower();
+        output.genus = genusF.text.ToLower();
+        output.species = speciesF.text.ToLower();
 
         orderF.enabled = false;
         familyF.enabled = false;
         genusF.enabled = false;
         speciesF.enabled = false;
 
-        orderT.GetComponent<TMP_Text>().text = output["Order"];
-        familyT.GetComponent<TMP_Text>().text = output["Family"];
-        genusT.GetComponent<TMP_Text>().text = output["Genus"];
-        speciesT.GetComponent<TMP_Text>().text = output["Species"];
+        orderT.GetComponent<TMP_Text>().text = output.order;
+        familyT.GetComponent<TMP_Text>().text = output.family;
+        genusT.GetComponent<TMP_Text>().text = output.genus;
+        speciesT.GetComponent<TMP_Text>().text = output.species;
 
         return output;
     }
 
     void markGreen(GameObject obj){
-        Color32 targetC = new Color32(9,0,255,235);
+        Color32 targetC = new Color32(9,255,0,235);
         StartCoroutine(colorAnimation(obj.GetComponent<TMP_Text>(), obj.transform, targetC, 1));
     }
 
@@ -66,17 +68,18 @@ public class RowInputMonitor : MonoBehaviour
         textTransform.rotation = originalRot;
     }
 
-    public void markInput(Dictionary<string, string> refe){
-        if(refe["Order"] == output["Order"]) markGreen(orderT);
+    public void markInput(Mammal refe){
+        if(refe.order == output.order) markGreen(orderT);
         else markRed(orderT);
 
-        if(refe["Family"] == output["Family"]) markGreen(familyT);
+        if(refe.family == output.family) markGreen(familyT);
         else markRed(familyT);
 
-        if(refe["Genus"] == output["Genus"]) markGreen(genusT);
+        if(refe.genus == output.genus) markGreen(genusT);
         else markRed(genusT);
 
-        if(refe["Species"] == output["Species"]) markGreen(speciesT);
+        if(refe.species == output.species) markGreen(speciesT);
         else markRed(speciesT);
     }
+
 }

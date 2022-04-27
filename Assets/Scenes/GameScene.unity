@@ -957,7 +957,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1000}
+  m_SizeDelta: {x: 0, y: 1400}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &604869129
 MonoBehaviour:
@@ -1017,6 +1017,7 @@ GameObject:
   - component: {fileID: 661270481}
   - component: {fileID: 661270483}
   - component: {fileID: 661270482}
+  - component: {fileID: 661270484}
   m_Layer: 0
   m_Name: PointTracker
   m_TagString: Untagged
@@ -1064,7 +1065,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Points to Gain:  1 0'
+  m_text: 'Points to Gain:  10'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -1073,8 +1074,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3015290111
-  m_fontColor: {r: 1, g: 0.6745283, b: 0.7267107, a: 0.7019608}
+    rgba: 3013607321
+  m_fontColor: {r: 0.5990566, g: 1, b: 0.6221877, a: 0.7019608}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1141,6 +1142,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661270480}
   m_CullTransparentMesh: 1
+--- !u!114 &661270484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661270480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd92be2d93d33d928aa1bb1a4b3514d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  point: 0
+  max_point: 10
+  lowC:
+    serializedVersion: 2
+    rgba: 4283519412
+  highC:
+    serializedVersion: 2
+    rgba: 4282955585
+  animate_time: 1
 --- !u!1 &751272965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1537,6 +1559,7 @@ GameObject:
   - component: {fileID: 1009805123}
   - component: {fileID: 1009805124}
   - component: {fileID: 1009805125}
+  - component: {fileID: 1009805126}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -1599,18 +1622,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009805122}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1ebc2879fa4c67de83c65ffac8ed039, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ViewPort: {fileID: 604869127}
   QueryRow: {fileID: 7070003799693418822, guid: 4f17f49f8671a34cb8d95ab581dc9d00, type: 3}
-  order: chiroptera
-  family: phyllostomidae
-  genus: ardops
-  species: nichollsi
+  Introducer: {fileID: 356790469}
+  PointKeeper: {fileID: 661270480}
   triesLeft: 10
+--- !u!114 &1009805126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009805122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72d7f9f3f4ab374989a36ac8977b7d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputFile: {fileID: 4900000, guid: 9b7abc10dbc25f1958eed5584da8e45d, type: 3}
 --- !u!1 &1051589265
 GameObject:
   m_ObjectHideFlags: 0
