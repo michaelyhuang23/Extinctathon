@@ -16,6 +16,7 @@ public class MammalManager : MonoBehaviour
             string[] cates = line.Split(" # ");
             if(cates.Length != 7)
                 print("abnormal length: "+cates.Length);
+            print(line);
             Mammal.mammals[i] = new Mammal(cates[0], cates[1], cates[2], cates[3], cates[4], cates[5], cates[6]);
         }
 
