@@ -5,11 +5,11 @@ using TMPro;
 
 public class IntroManager : MonoBehaviour
 {
-    public string introText = "Corknut: This gigantic mammal has four legs and went extinct in 2056.";
+    public string introText;
     [SerializeField] private TMP_Text textfield;
     [SerializeField] private GameObject glitcher;
     public void DisplayIntro(string txt){
-        introText = txt;
+        introText = "Corknut: "+txt;
         textfield.text = "";
         gameObject.GetComponent<TypeWriterEffect>().TypeText(introText, textfield);
         StartCoroutine(slowGlitch());
@@ -17,8 +17,8 @@ public class IntroManager : MonoBehaviour
 
     IEnumerator slowGlitch(){
         yield return new WaitForSeconds(3);
-        glitcher.GetComponent<GlitchEffect>().intensity = 0.2f;
-        glitcher.GetComponent<GlitchEffect>().flipIntensity = 0.2f;
-        glitcher.GetComponent<GlitchEffect>().colorIntensity = 0.4f;
+        glitcher.GetComponent<GlitchEffect>().intensity = 0.1f;
+        glitcher.GetComponent<GlitchEffect>().flipIntensity = 0.01f;
+        glitcher.GetComponent<GlitchEffect>().colorIntensity = 0.05f;
     }
 }

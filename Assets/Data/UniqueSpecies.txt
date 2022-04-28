@@ -3800,3 +3800,5 @@ stejnegeri
 traversii
 shepherdi
 cavirostris
+coelacanth
+speciosa

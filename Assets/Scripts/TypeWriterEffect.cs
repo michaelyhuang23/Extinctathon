@@ -20,6 +20,10 @@ public class TypeWriterEffect : MonoBehaviour
       StartCoroutine(typeCharacters(text, txtObj));
    }
 
+   public void TypeText(string text){
+      TypeText(text, gameObject.GetComponent<TMP_Text>());
+   }
+
    private IEnumerator typeCharacters(string text, TMP_Text txtObj){
       float t = 0;
       int charIndex = 0;

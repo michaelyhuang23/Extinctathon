@@ -12,10 +12,13 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject QueryRow;
     [SerializeField] private GameObject Introducer;
     [SerializeField] private GameObject PointKeeper;
+    [SerializeField] private GameExitManager exiter;
     public Mammal answerAnimal;
     private List<GameObject> rows;
     private Mammal[] mammals;
     public int triesLeft = 10;
+
+    public static int animalIndex = 0;
 
     void createRow(){
         GameObject newRow = Instantiate(QueryRow) as GameObject;
@@ -27,9 +30,10 @@ public class InputManager : MonoBehaviour
 
     void Start(){
         mammals = Mammal.mammals;
-        int index = Random.Range(0, mammals.Length);
-        print("chosen index: "+index);
-        answerAnimal = mammals[index];
+        print("chosen index: "+animalIndex);
+        answerAnimal = mammals[animalIndex];
+        animalIndex++;
+        animalIndex %= mammals.Length;
         Introducer.GetComponent<IntroManager>().DisplayIntro(answerAnimal.hint);
         rows = new List<GameObject>();
         createRow();
@@ -37,7 +41,7 @@ public class InputManager : MonoBehaviour
 
     IEnumerator slowExit(){
         yield return new WaitForSeconds(3);
-        SceneManager.LoadScene("StartMenu");
+        exiter.BeginExit(true);
     }
 
     void Judge(){

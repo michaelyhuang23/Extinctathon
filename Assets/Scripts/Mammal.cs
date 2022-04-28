@@ -74,6 +74,9 @@ public class Mammal{
         }
         return false;
     }
+    public string genString(){
+        return "order "+order+", family "+family+", genus "+genus+", species "+species;
+    }
 
 
     public static Mammal[] mammals;

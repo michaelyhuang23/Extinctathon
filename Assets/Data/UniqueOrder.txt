@@ -27,3 +27,7 @@ carnivora
 perissodactyla
 artiodactyla
 cetacea
+coelacanthiformes
+anura
+columbiformes
+gruiformes

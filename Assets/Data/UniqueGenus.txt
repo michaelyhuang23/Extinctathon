@@ -1228,3 +1228,7 @@ indopacetus
 mesoplodon
 tasmacetus
 ziphius
+latimeria
+oophaga
+ectopistes
+rallina

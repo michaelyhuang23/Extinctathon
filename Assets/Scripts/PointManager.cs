@@ -7,11 +7,11 @@ using CustomAnimation;
 public class PointManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int point;
+    public int point = 0;
     public int max_point;
     [SerializeField] private Color32 lowC, highC;
     [SerializeField] private float animate_time = 1f;
-    [SerializeField] private ExitManager exiter;
+    [SerializeField] private GameExitManager exiter;
 
     void Start(){
         point = max_point;
@@ -27,7 +27,7 @@ public class PointManager : MonoBehaviour
         StartCoroutine(CodeAnimator.colorAnimation(gameObject.GetComponent<TMP_Text>(), targetC, animate_time));
 
         if(point == 0)
-            exiter.ExitPlayRoom();
+            exiter.BeginExit(false);
     }
 
 }
